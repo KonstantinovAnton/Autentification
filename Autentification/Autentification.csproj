@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Global.cs" />
     <Compile Include="WindowForCode.xaml.cs">
       <DependentUpon>WindowForCode.xaml</DependentUpon>
     </Compile>

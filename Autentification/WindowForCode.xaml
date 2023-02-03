@@ -10,7 +10,8 @@
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label HorizontalAlignment="Center">Введите код</Label>
-            <TextBox Width="160"></TextBox>
+            <TextBox Name="textBoxCode" Width="160"></TextBox>
+            <Label Name="labelTime"></Label>
         </StackPanel>
     </Grid>
 </Window>
