@@ -23,7 +23,7 @@ namespace Autentification
     public partial class MainWindow : Window
     {
 
-        private int time = 5;
+        private int time = 60;
         private DispatcherTimer timer;
 
 
