@@ -27,7 +27,7 @@ namespace Autentification
         public WindowForCode()
         {
             InitializeComponent();
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 5);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 10);
             dispatcherTimer.Tick += new EventHandler(DisTimer_Tick);
             runTimer();   
         }

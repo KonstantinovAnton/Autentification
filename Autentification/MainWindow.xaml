@@ -8,15 +8,25 @@
         Title="MainWindow" Height="450" Width="800"
         FontSize="20">
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label>Логин</Label>
-            <TextBox Name="textBoxLogin" Width="160">admin</TextBox>
+            <TextBox Name="textBoxLogin" Width="160"></TextBox>
             <Label>Пароль</Label>
             <PasswordBox Name="passBox" Width="160"></PasswordBox>
-            <Button Name="btnAuto" Margin="0,20,0,0" Click="btnAuto_Click">Авторизоваться</Button>
         </StackPanel>
+        <StackPanel Name="spCaptcha">
+            <Image Margin="5" Name="captchaImage" Width="230" Height="80"></Image>
+          
+            <TextBox Name="textBoxCaptcha" Width="160"></TextBox>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Name="btnLoadCaptcha" Margin="0,20,0,0" Click="btnLoadCaptcha_Click">Другая CAPTCHA</Button>
+                   <Button Name="btnAuto" Margin="0,20,0,0" Click="btnAuto_Click">Авторизоваться</Button>
+             </StackPanel>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <TextBlock Name="textBoxAccessIn" Margin="0,0,0,20"></TextBlock>
         </StackPanel>
+            </StackPanel>
     </Grid>
 </Window>

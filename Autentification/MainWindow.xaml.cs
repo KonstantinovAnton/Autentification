@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace Autentification
     public partial class MainWindow : Window
     {
 
-        private int time = 15;
+        private int time = 5;
         private DispatcherTimer timer;
 
 
@@ -30,20 +31,22 @@ namespace Autentification
         public MainWindow()
         {
             InitializeComponent();
+
+            textBoxCaptcha.Visibility = Visibility.Collapsed;
+            captchaImage.Visibility = Visibility.Collapsed;
+            btnLoadCaptcha.Visibility = Visibility.Collapsed;
+            spCaptcha.Visibility = Visibility.Collapsed;
+
             textBoxLogin.Text = Global.login;
             checkInitialize();
-
-            
         }
 
-
-
-        string login = "admin";      
+        string login = "admin";
         string password = "admin";
 
         private void btnAuto_Click(object sender, RoutedEventArgs e)
         {
-            if(textBoxLogin.Text == "")
+            if (textBoxLogin.Text == "")
             {
                 MessageBox.Show("Введите логин", "Аутентификация",
                   MessageBoxButton.OK, MessageBoxImage.Information);
@@ -55,8 +58,13 @@ namespace Autentification
                   MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
+            if (!(textBoxLogin.Text == login && passBox.Password == password))
+            {
+                MessageBox.Show("Таких нет!", "Ошибка авторизации",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-            if (textBoxLogin.Text == login && passBox.Password == password)
+            if (Global.failedAttempt < 2)
             {
                 WindowForCode windowForCode = new WindowForCode();
 
@@ -68,18 +76,38 @@ namespace Autentification
 
                 Global.randomCode = randomeCode;
                 Global.login = textBoxLogin.Text;
-                    
+
                 MessageBox.Show("Код: " + randomeCode, "Аутентификация",
-                    MessageBoxButton.OK, MessageBoxImage.Information); 
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Таких нет!", "Ошибка авторизации",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                if (textBoxCaptcha.Text == Global.captchaText)
+                {
+                    MessageBox.Show("Добро пожаловать ", "Аутентификация",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else {
+                    if (Global.failedAttempt == 2)
+                    {
+                        MessageBox.Show("Неверный текст CAPTCHA, у Вас осталась одна попытка. Вводите заглавными буквами ", "Аутентификация",
+                      MessageBoxButton.OK, MessageBoxImage.Information);
+                        Global.failedAttempt++;
+                        loadCaptcha();
+                    }
+                    else if (Global.failedAttempt == 3)
+                    {
+                        MessageBox.Show("Неверный текст CAPTCHA, попыток не осталось ", "Аутентификация",
+                     MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        btnAuto.Visibility = Visibility.Collapsed;
+                    }
+                }
             }
+            
         }
-
-
+    
+   
         private void checkInitialize()
         {
             if(Global.failedAttempt == 1)
@@ -89,7 +117,11 @@ namespace Autentification
             }
             else if(Global.failedAttempt == 2)
             {
-
+                textBoxCaptcha.Visibility = Visibility.Visible;
+                captchaImage.Visibility = Visibility.Visible;
+                btnLoadCaptcha.Visibility = Visibility.Visible;
+                spCaptcha.Visibility = Visibility.Visible;
+                loadCaptcha();
             }
 
         }
@@ -110,6 +142,7 @@ namespace Autentification
                 timer.Stop();
                 textBoxAccessIn.Text = "";
                 btnAuto.Visibility = Visibility.Visible;
+
            
             }
             else
@@ -117,6 +150,24 @@ namespace Autentification
                 textBoxAccessIn.Text = "Получить новый код можно будет через " + time + " секунд";
                 time--;
             }
+        }
+
+        public void loadCaptcha()
+        {
+            int width = 230;
+            int height = 80;
+            var captchaCode = Captcha.generateCaptcha();
+            var result = Captcha.GetCaptchaImage(width, height, captchaCode);
+
+            Stream stream = new MemoryStream(result.captchaByteCode);
+
+            captchaImage.Source = BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+
+        }
+
+        private void btnLoadCaptcha_Click(object sender, RoutedEventArgs e)
+        {
+            loadCaptcha();
         }
 
 

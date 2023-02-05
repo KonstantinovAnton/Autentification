@@ -11,6 +11,8 @@ namespace Autentification
         public static int randomCode; // код генерируемый 
         public static int failedAttempt = 0;
         public static string login = "";
-    
+
+        public static string captchaText;
+
     }
 }
